@@ -1,8 +1,11 @@
-import Services from "@/components/user/Services"
+import Contact from "@/components/user/Contact";
+
+
 export default function page() {
   return (
     <div>
-      <Services/>
+     <Contact/>
+
     </div>
   )
 }

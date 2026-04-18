@@ -1,8 +1,9 @@
-import Services from "@/components/user/Services"
+import Booking from "@/components/user/Booking"
+
 export default function page() {
   return (
     <div>
-      <Services/>
+      <Booking />
     </div>
   )
 }

@@ -1,15 +1,11 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Inter, Space_Grotesk, Poppins } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+const poppins = Poppins({ subsets: ["latin"], weight: ["600","700"], variable: "--font-logo" });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
 
 export const metadata = {
   title: "DeveloperHub Agency platform",
@@ -20,9 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${poppins.variable} h-full`}
     >
-      <body className="min-h-full w-full flex flex-col">{children}</body>
+      <body >
+          {children}
+      </body>
     </html>
   );
 }
