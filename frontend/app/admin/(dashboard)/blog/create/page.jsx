@@ -1,7 +1,11 @@
 
 
-export default function page() {
+import BlogForm from "@/components/admin/forms/BlogForm";
+
+export default function CreateBlogPage() {
   return (
-    <div>create page</div>
-  )
+    <div>
+      <BlogForm mode="create" />
+    </div>
+  );
 }

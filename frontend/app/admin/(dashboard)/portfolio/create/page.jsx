@@ -1,5 +1,9 @@
-export default function page() {
+import PortfolioForm from "@/components/admin/forms/PortfolioForm";
+
+export default function CreatePortfolioPage() {
   return (
-    <div>create page</div>
-  )
+    <div>
+      <PortfolioForm mode="create" />
+    </div>
+  );
 }

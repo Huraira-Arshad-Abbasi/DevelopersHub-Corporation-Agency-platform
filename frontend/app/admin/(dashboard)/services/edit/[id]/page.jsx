@@ -1,5 +1,18 @@
-export default function page() {
+import ServiceForm from "@/components/admin/forms/ServiceForm";
+
+export default function EditServicePage() {
+  // later fetch data using id
+
+  const dummyData = {
+    title: "Web Development",
+    description: "Build modern apps",
+    icon: "code",
+    isActive: true,
+  };
+
   return (
-    <div>Edit page</div>
-  )
+    <div>
+      <ServiceForm mode="edit" initialData={dummyData} />
+    </div>
+  );
 }
