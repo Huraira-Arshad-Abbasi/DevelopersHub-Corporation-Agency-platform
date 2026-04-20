@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+import cors from 'cors';
 
 import userRoutes      from './routes/userRoutes.js';
 import serviceRoutes   from './routes/serviceRoutes.js';
@@ -16,6 +17,7 @@ connectDB();
 
 
 app.use(express.json());
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }));
 
 // Routes
 app.use('/api/user',      userRoutes);

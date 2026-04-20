@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { createBooking } from "@/lib/api";
+
 
 export default function Booking() {
   const [form, setForm] = useState({
@@ -13,6 +15,8 @@ export default function Booking() {
     note: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -20,23 +24,44 @@ export default function Booking() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Combine date + time
+  try {
+    setLoading(true);
+
+    // ✅ Combine date + time
     const dateTime = new Date(`${form.date}T${form.time}`);
 
     const finalData = {
-      clientName: form.clientName,
-      email: form.email,
-      phone: form.phone,
-      service: form.service,
+      ...form,
       dateTime,
-      note: form.note,
     };
 
-    console.log(finalData); // later send to backend
-  };
+    delete finalData.date;
+    delete finalData.time;
+
+    const res = await createBooking(finalData);
+
+    alert(res.data.message);
+
+    setForm({
+      clientName: "",
+      email: "",
+      phone: "",
+      service: "",
+      date: "",
+      time: "",
+      note: "",
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || "Failed to create booking!");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="px-4 md:px-10 lg:px-20 py-16">
@@ -122,9 +147,10 @@ export default function Booking() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700"
+            disabled={loading}
+            className="w-full bg-blue-600 disabled:bg-blue-200 cursor-pointer text-white py-3 rounded-md hover:bg-blue-700"
           >
-            Book Appointment
+            {loading ? "Booking..." : "Book Appointment"}
           </button>
 
         </form>

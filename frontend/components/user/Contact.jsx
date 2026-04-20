@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { createLead } from "@/lib/api";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -12,6 +13,8 @@ export default function Contact() {
     details: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -19,9 +22,29 @@ export default function Contact() {
     });
   };
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form); // later send to backend
+
+    try {
+      setLoading(true);
+
+      await createLead(form);
+
+      alert("Message sent successfully!");
+
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        serviceInterested: "",
+        details: "",
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -110,9 +133,11 @@ export default function Contact() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-md font-medium hover:bg-blue-700 transition"
+            disabled={loading}
+
+            className="w-full bg-blue-600 disabled:bg-blue-200 cursor-pointer text-white py-3 rounded-md font-medium hover:bg-blue-700 transition"
           >
-            Submit Inquiry
+            Submit Inquiry{loading ? "..." : ""}
           </button>
 
         </form>
