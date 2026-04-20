@@ -26,7 +26,7 @@ export const getBookings = () => api.get("/meetings");
 
 // Update booking status
 export const updateBookingStatus = (id, status) =>
-  api.patch(`/meetings/${id}`, { status });
+  api.patch(`/meetings/${id}/status`, { status });
 
 // Delete booking
 export const deleteBooking = (id) => api.delete(`/meetings/${id}`);

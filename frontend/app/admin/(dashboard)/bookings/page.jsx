@@ -1,87 +1,145 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  getBookings,
+  updateBookingStatus,
+  deleteBooking,
+} from "@/lib/api";
 
 export default function BookingsPage() {
-  const [bookings, setBookings] = useState([
-    {
-      _id: "1",
-      clientName: "Ali Khan",
-      email: "ali@example.com",
-      phone: "03001234567",
-      service: "Web Development",
-      dateTime: "2026-04-20T10:00",
-      status: "pending",
-      note: "Urgent project",
-    },
-    {
-      _id: "2",
-      clientName: "Sara Ahmed",
-      email: "sara@example.com",
-      phone: "03111234567",
-      service: "UI Design",
-      dateTime: "2026-04-22T14:00",
-      status: "confirmed",
-      note: "",
-    },
-  ]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleStatusChange = (id, newStatus) => {
-    const updated = bookings.map((item) =>
-      item._id === id ? { ...item, status: newStatus } : item
-    );
-    setBookings(updated);
+  // 🔥 Fetch bookings
+  const fetchBookings = async () => {
+    try {
+      const res = await getBookings();
+      setBookings(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to fetch bookings");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  // 🔥 Update status (REAL API)
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      await updateBookingStatus(id, newStatus);
+      console.log("this line executed");
+      
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id ? { ...b, status: newStatus } : b
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status");
+    }
+  };
+
+  // 🔥 Delete booking
+  const handleDelete = async (id) => {
+    if (!confirm("Delete this booking?")) return;
+
+    try {
+      await deleteBooking(id);
+      setBookings((prev) => prev.filter((b) => b._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete booking");
+    }
+  };
+
+  if (loading) return <p>Loading bookings...</p>;
+
   return (
-    <div>
+    <div className="max-w-full">
       <h1 className="text-2xl font-bold mb-6">Bookings</h1>
 
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
-        <table className="w-full">
+        <table className="max-w-full table-fixed">
           <thead className="bg-gray-100 text-left">
             <tr>
-              <th className="p-3">Client</th>
-              <th className="p-3">Service</th>
-              <th className="p-3">Date & Time</th>
-              <th className="p-3">Note</th>
-              <th className="p-3">Status</th>
+              <th className="p-3 w-[25%]">Client</th>
+              <th className="p-3 w-[20%]">Service</th>
+              <th className="p-3 w-[20%]">Schedule</th>
+              <th className="p-3 w-[20%]">Note</th>
+              <th className="p-3 w-[10%]">Status</th>
+              <th className="p-3 w-[5%]">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking._id} className="border-t">
-                <td className="p-3">
-                  <p className="font-medium">{booking.clientName}</p>
-                  <p className="text-sm text-gray-500">
-                    {booking.email}
-                  </p>
-                </td>
+            {bookings.map((booking) => {
+              const dateObj = new Date(booking.dateTime);
 
-                <td className="p-3">{booking.service}</td>
+              return (
+                <tr key={booking._id} className="border-t align-top">
+                  
+                  {/* Client */}
+                  <td className="p-3">
+                    <p className="font-medium">{booking.clientName}</p>
+                    <p className="text-sm text-gray-500 wrap-break-words">
+                      {booking.email}
+                    </p>
+                  </td>
 
-                <td className="p-3">
-                  {new Date(booking.dateTime).toLocaleString()}
-                </td>
+                  {/* Service */}
+                  <td className="p-3  wrap-break-words">
+                    {booking.service || "-"}
+                  </td>
 
-                <td className="p-3">{booking.note}</td>
+                  {/* Date + Time (Improved UI) */}
+                  <td className="p-3">
+                    <p className="text-sm font-medium">
+                      {dateObj.toLocaleDateString()}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {dateObj.toLocaleTimeString()}
+                    </p>
+                  </td>
 
-                <td className="p-3">
-                  <select
-                    value={booking.status}
-                    onChange={(e) =>
-                      handleStatusChange(booking._id, e.target.value)
-                    }
-                    className="border px-2 py-1 rounded-md"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
+                  {/* Note (clean + small) */}
+                  <td className="p-3 text-xs text-gray-600 wrap-break-words leading-tight">
+                    {booking.note || "-"}
+                  </td>
+
+                  {/* Status */}
+                  <td className="p-3">
+                    <select
+                      value={booking.status}
+                      onChange={(e) =>
+                        handleStatusChange(booking._id, e.target.value)
+                      }
+                      className="border px-2 py-1 rounded-md text-sm"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+
+                  {/* Delete */}
+                  <td className="p-3">
+                    <button
+                      onClick={() => handleDelete(booking._id)}
+                      className="text-red-600 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

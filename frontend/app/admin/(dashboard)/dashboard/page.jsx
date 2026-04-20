@@ -2,6 +2,7 @@
 
 import { Users, Briefcase, FileText, Calendar } from "lucide-react";
 
+
 export default function DashboardPage() {
   const stats = [
     { title: "Services", value: 12, icon: <Briefcase />, color: "bg-blue-100 text-blue-600" },
