@@ -1,8 +1,28 @@
-'use client'
+"use client";
 
+import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 
 export default function Topbar () {
+  const [admin, setAdmin] = useState(null)
+
+  useEffect(() => {
+    const fetchAdmin = async () =>{
+      // fetch admin from local storage
+      const data = localStorage.getItem("admin");
+      if (data) {
+      try {
+        const parsedData = JSON.parse(data);
+        setAdmin(parsedData);
+      } catch (error) {
+        console.error("Error parsing admin data:", error);
+      }
+    }
+    }
+
+    fetchAdmin()
+  }, []);
+
   const router = useRouter()
   const pathname = usePathname()
 
@@ -14,6 +34,16 @@ export default function Topbar () {
     if (!last) return 'Dashboard'
 
     return last.charAt(0).toUpperCase() + last.slice(1)
+  }
+
+
+
+  // handle logout
+  const handleLogout = () => {
+    // remove token and redirect to login
+    localStorage.removeItem('token')
+    localStorage.removeItem("admin");
+    window.location.href = '/admin/login'
   }
 
   return (
@@ -36,12 +66,14 @@ export default function Topbar () {
       {/* Right Side */}
       <div className='flex items-center gap-4'>
         {/* Admin Name */}
-        <span className='text-sm text-gray-600'>Admin</span>
+        <span className='text-sm text-gray-600'>
+          {admin?.name || "Admin"}
+        </span>
 
         {/* Logout Button */}
         <button
-          onClick={() => router.push('/admin/login')}
-          className='bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600'
+          onClick={handleLogout}
+          className='bg-red-500 cursor-pointer text-white px-3 py-1 rounded-md text-sm hover:bg-red-600'
         >
           Logout
         </button>

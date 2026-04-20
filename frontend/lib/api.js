@@ -1,5 +1,11 @@
 import api from "./axios";
 
+// Admin Login
+export const loginAdmin = (data) => api.post("/auth/login", data);
+// Get admin profile
+export const getAdminProfile = () => api.get("/auth/me");
+
+
 // Leads API
 export const createLead = (data) => api.post("/leads", data);
 // Get all leads (admin)
