@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function PortfolioForm({ mode = "create", initialData }) {
+export default function PortfolioForm({ mode, onSubmit, initialData }) {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -15,12 +15,15 @@ export default function PortfolioForm({ mode = "create", initialData }) {
   });
 
   useEffect(() => {
-    if (mode === "edit" && initialData) {
-      setForm({
-        ...initialData,
-        technologies: initialData.technologies.join(", "),
-      });
-    }
+    const fetchInitialData = async () => {
+      if (mode === "edit" && initialData) {
+        setForm({
+          ...initialData,
+          technologies: initialData.technologies.join(", "),
+        });
+      }
+    };
+    fetchInitialData();
   }, [initialData, mode]);
 
   const handleChange = (e) => {
@@ -32,15 +35,7 @@ export default function PortfolioForm({ mode = "create", initialData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const finalData = {
-      ...form,
-      technologies: form.technologies
-        .split(",")
-        .map((tech) => tech.trim()),
-    };
-
-    console.log(finalData);
+    onSubmit(form);
 
     router.push("/admin/portfolio");
   };
@@ -108,7 +103,7 @@ export default function PortfolioForm({ mode = "create", initialData }) {
       {/* Submit */}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded-md"
+        className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-md"
       >
         {mode === "edit" ? "Update Project" : "Create Project"}
       </button>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function ServiceForm({ mode = "create", initialData }) {
+export default function ServiceForm({ onSubmit, mode, initialData }) {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -13,10 +13,15 @@ export default function ServiceForm({ mode = "create", initialData }) {
     isActive: true,
   });
 
+
   useEffect(() => {
-    if (mode === "edit" && initialData) {
-      setForm(initialData);
-    }
+    const fetchInitialData = async () => {
+      if (mode === "edit" && initialData) {
+        setForm(initialData);
+      }
+    };
+
+    fetchInitialData();
   }, [initialData, mode]);
 
   const handleChange = (e) => {
@@ -30,8 +35,8 @@ export default function ServiceForm({ mode = "create", initialData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(form); // later API call
+    // submit data
+    onSubmit(form);
 
     router.push("/admin/services");
   };

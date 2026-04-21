@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function BlogForm({ mode = "create", initialData }) {
+export default function BlogForm({ mode , initialData, onSubmit }) {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -24,12 +24,12 @@ export default function BlogForm({ mode = "create", initialData }) {
       .replace(/(^-|-$)/g, "");
 
   useEffect(() => {
-    if (mode === "edit" && initialData) {
-      setForm({
-        ...initialData,
-        tags: initialData.tags.join(", "),
-      });
-    }
+    const fetchInitialData = async () => {
+      if (mode === "edit" && initialData) {
+        setForm(initialData);
+      }
+    };
+    fetchInitialData();
   }, [initialData, mode]);
 
   const handleChange = (e) => {
@@ -39,24 +39,16 @@ export default function BlogForm({ mode = "create", initialData }) {
       ...form,
       [name]: value,
     };
-
-    // auto update slug when title changes
+    // auto-update slug when title changes
     if (name === "title") {
       updatedForm.slug = generateSlug(value);
     }
-
     setForm(updatedForm);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const finalData = {
-      ...form,
-      tags: form.tags.split(",").map((tag) => tag.trim()),
-    };
-
-    console.log(finalData);
+    onSubmit(form);
 
     router.push("/admin/blog");
   };
@@ -136,7 +128,7 @@ export default function BlogForm({ mode = "create", initialData }) {
       {/* Submit */}
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded-md"
+        className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-md"
       >
         {mode === "edit" ? "Update Blog" : "Create Blog"}
       </button>

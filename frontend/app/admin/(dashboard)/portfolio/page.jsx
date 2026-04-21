@@ -1,22 +1,44 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { getPortfolios, deletePortfolio } from "@/lib/api";
 import Link from "next/link";
 
 export default function PortfolioPage() {
-  const projects = [
-    {
-      _id: "1",
-      title: "E-Commerce App",
-      technologies: ["React", "Node"],
-      liveUrl: "#",
-    },
-    {
-      _id: "2",
-      title: "Booking System",
-      technologies: ["MERN"],
-      liveUrl: "#",
-    },
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await getPortfolios();
+      setProjects(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to fetch portfolio");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!confirm("Delete this project?")) return;
+
+    try {
+      await deletePortfolio(id);
+      setProjects((prev) =>
+        prev.filter((project) => project._id !== id)
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete project");
+    }
+  };
+
+  if (loading) return <p>Loading portfolio...</p>;
 
   return (
     <div>
@@ -69,7 +91,9 @@ export default function PortfolioPage() {
                     Edit
                   </Link>
 
-                  <button className="text-red-600">
+                  <button
+                    onClick={() => handleDelete(project._id)}
+                   className="text-red-600 cursor-pointer">
                     Delete
                   </button>
                 </td>

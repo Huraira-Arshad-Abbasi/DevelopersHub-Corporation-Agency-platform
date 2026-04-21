@@ -1,23 +1,37 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { getBlogs, deleteBlog } from "@/lib/api";
+
 import Link from "next/link";
 
 export default function BlogPage() {
-  const blogs = [
-    {
-      _id: "1",
-      title: "Understanding MERN Stack",
-      slug: "understanding-mern-stack",
-      status: "published",
-    },
-    {
-      _id: "2",
-      title: "Next.js Basics",
-      slug: "nextjs-basics",
-      status: "draft",
-    },
-  ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const fetchBlogs = async () => {
+    try {
+      const res = await getBlogs();
+      setBlogs(res.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to fetch blogs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const handleDelete = async (id) => {
+    await deleteBlog(id);
+    setBlogs(blogs.filter((blog) => blog._id !== id));
+  };
+
+
+  if (loading) return <p>Loading blogs...</p>;
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -68,7 +82,9 @@ export default function BlogPage() {
                     Edit
                   </Link>
 
-                  <button className="text-red-600">
+                  <button
+                    onClick={() => handleDelete(blog._id)}
+                   className="text-red-600 cursor-pointer">
                     Delete
                   </button>
                 </td>
