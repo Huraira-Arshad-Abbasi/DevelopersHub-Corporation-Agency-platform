@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getPortfolios, deletePortfolio } from "@/lib/api";
 import Link from "next/link";
+import { Trash2, SquarePen, CirclePlusIcon } from "lucide-react";
 
 export default function PortfolioPage() {
   const [projects, setProjects] = useState([]);
@@ -49,7 +50,7 @@ useEffect(() => {
           href="/admin/portfolio/create"
           className="bg-blue-600 text-white px-4 py-2 rounded-md"
         >
-          + Add Project
+          <CirclePlusIcon size={20} className="inline" /> Add Project
         </Link>
       </div>
 
@@ -77,7 +78,7 @@ useEffect(() => {
                   <a
                     href={project.liveUrl}
                     target="_blank"
-                    className="text-blue-600"
+                    className="text-blue-600 cursor-pointer hover:underline"
                   >
                     Visit
                   </a>
@@ -86,15 +87,17 @@ useEffect(() => {
                 <td className="p-3 flex gap-3">
                   <Link
                     href={`/admin/portfolio/edit/${project._id}`}
-                    className="text-blue-600"
+                    className="text-blue-600 cursor-pointer hover:underline"
                   >
-                    Edit
+                    <SquarePen size={20} />
+                    {/* Edit */}
                   </Link>
 
                   <button
                     onClick={() => handleDelete(project._id)}
-                   className="text-red-600 cursor-pointer">
-                    Delete
+                   className="text-red-600 cursor-pointer hover:underline">
+                   <Trash2 size={20} />
+                    {/* Delete */}
                   </button>
                 </td>
               </tr>

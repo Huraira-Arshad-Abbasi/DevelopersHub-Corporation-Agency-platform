@@ -20,6 +20,7 @@ export default function BookingBtn() {
         onClick={() => router.push("/booking")}
         className="bg-gray-900 backdrop-blur text-blue-500 px-6 py-3 rounded-full shadow-red-500 shadow-md
                    hover:bg-black transition 
+                   cursor-pointer
                    flex items-center gap-2 
                    text-sm font-medium
                    animate-float"

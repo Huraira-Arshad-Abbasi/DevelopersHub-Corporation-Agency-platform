@@ -1,38 +1,33 @@
-import Image from 'next/image'
+"use client";
+
+import { useEffect, useState } from "react";
+import { getBlogs } from "@/lib/api";
 
 export default function Blog() {
-  const blogs = [
-    {
-      title: "How to Build Scalable Web Apps",
-      content: "Learn how to design scalable systems using modern tools...",
-      slug: "scalable-web-apps",
-      author: "Admin",
-      tags: ["React", "Node.js"],
-      imageUrl: "/images/blog1.jpg",
-      status: "published",
-      createdAt: "2026-04-10",
-    },
-    {
-      title: "Understanding REST APIs",
-      content: "A beginner-friendly guide to RESTful APIs...",
-      slug: "rest-apis",
-      author: "Admin",
-      tags: ["API", "Backend"],
-      imageUrl: "/images/blog2.jpg",
-      status: "published",
-      createdAt: "2026-04-12",
-    },
-    {
-      title: "JWT Authentication Explained",
-      content: "Secure your apps using JWT authentication...",
-      slug: "jwt-auth",
-      author: "Admin",
-      tags: ["Auth", "Security"],
-      imageUrl: "/images/blog3.jpg",
-      status: "published",
-      createdAt: "2026-04-15",
-    },
-  ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await getBlogs();
+        console.log(res.data);
+        
+        setBlogs(res.data);
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center py-20">Loading blog posts...</p>;
+  }
 
   return (
     <div className="px-4 md:px-10 lg:px-20 py-16">
@@ -51,11 +46,11 @@ export default function Blog() {
           >
 
             {/* Image */}
-            <img
+            {/* <img
               src="/image/teamwork.jpeg"
               alt="picture"
               className="w-full h-48 object-cover"
-            />
+            /> */}
 
             {/* Content */}
             <div className="p-5">
@@ -72,7 +67,7 @@ export default function Blog() {
 
               {/* Content Preview */}
               <p className="text-sm text-gray-600 mb-4">
-                {blog.content.substring(0, 80)}...
+                {blog.content}
               </p>
 
               {/* Tags */}
@@ -103,3 +98,4 @@ export default function Blog() {
     </div>
   );
 }
+     

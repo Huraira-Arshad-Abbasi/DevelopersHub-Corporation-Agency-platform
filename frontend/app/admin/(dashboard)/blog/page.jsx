@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getBlogs, deleteBlog } from "@/lib/api";
+import { Trash2, SquarePen, CirclePlusIcon } from "lucide-react";
 
 import Link from "next/link";
 
@@ -41,7 +42,7 @@ export default function BlogPage() {
           href="/admin/blog/create"
           className="bg-blue-600 text-white px-4 py-2 rounded-md"
         >
-          + Add Blog
+          <CirclePlusIcon size={20} className="inline" /> Add Blog
         </Link>
       </div>
 
@@ -77,15 +78,17 @@ export default function BlogPage() {
                 <td className="p-3 flex gap-3">
                   <Link
                     href={`/admin/blog/edit/${blog._id}`}
-                    className="text-blue-600"
+                    className="text-blue-600 cursor-pointer hover:underline"
                   >
-                    Edit
+                    <SquarePen size={20} />
+                    {/* Edit */}
                   </Link>
 
                   <button
                     onClick={() => handleDelete(blog._id)}
-                   className="text-red-600 cursor-pointer">
-                    Delete
+                   className="text-red-600 cursor-pointer hover:underline">
+                    <Trash2 size={20} />
+                    {/* Delete */}
                   </button>
                 </td>
               </tr>

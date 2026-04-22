@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getServices, deleteService } from "@/lib/api";
 import Link from "next/link";
+import { Trash2, SquarePen, CirclePlusIcon } from "lucide-react";
 
 export default function ServicesPage() {
   const [services, setServices] = useState([]);
@@ -50,7 +51,7 @@ export default function ServicesPage() {
           href="/admin/services/create"
           className="bg-blue-600 text-white px-4 py-2 rounded-md"
         >
-          + Add Service
+          <CirclePlusIcon size={20} className="inline" /> Add Service
         </Link>
       </div>
 
@@ -68,7 +69,7 @@ export default function ServicesPage() {
 
           <tbody>
             {services.map((service) => (
-              <tr key={service._id} className="border-t">
+              <tr key={service._id} className="border-t content-center">
 
                 <td className="p-3 font-medium wrap-break-word">
                   {service.title}
@@ -90,19 +91,20 @@ export default function ServicesPage() {
                   </span>
                 </td>
 
-                <td className="p-3 flex gap-3 text-sm">
+                <td className="p-3 flex gap-3  text-sm">
                   <Link
                     href={`/admin/services/edit/${service._id}`}
-                    className="text-blue-600"
+                    className="text-blue-600   cursor-pointer hover:underline"
                   >
-                    Edit
+                    <SquarePen size={20} />
+                    {/* Edit */}
                   </Link>
-
                   <button
                     onClick={() => handleDelete(service._id)}
-                    className="text-red-600 cursor-pointer"
+                    className="text-red-600 cursor-pointer hover:underline"
                   >
-                    Delete
+                    <Trash2 size={20} />
+                    {/* Delete */}
                   </button>
                 </td>
 

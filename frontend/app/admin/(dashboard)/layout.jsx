@@ -16,7 +16,6 @@ import Topbar from '@/components/admin/Topbar'
 export default function AdminLayout ({ children }) {
   const [loading, setLoading] = useState(true)
 
-
   const router = useRouter()
 
   useEffect(() => {
@@ -24,13 +23,17 @@ export default function AdminLayout ({ children }) {
 
     if (!token) {
       router.push('/admin/login')
-    } else{
-      setLoading(false)
+    } else {
+      const toggleLoading = () => {
+        setLoading(false)
+      }
+      toggleLoading()
     }
   }, [router])
- if (loading) return <p>Checking authentication...</p>;
+
+  if (loading) return <p>Checking authentication...</p>
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex h-screen'>
       {/* Sidebar */}
       <Sidebar />
       {/* Right Section */}
@@ -38,7 +41,7 @@ export default function AdminLayout ({ children }) {
         {/* Topbar */}
         <Topbar />
         {/* Page Content */}
-        <main className='p-6 bg-gray-100 flex-1'>{children}</main>
+        <main className='p-6 bg-gray-100 flex-1 overflow-auto'>{children}</main>
       </div>
     </div>
   )

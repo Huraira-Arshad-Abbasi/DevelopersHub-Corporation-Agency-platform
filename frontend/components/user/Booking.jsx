@@ -42,9 +42,6 @@ const handleSubmit = async (e) => {
     delete finalData.time;
 
     const res = await createBooking(finalData);
-
-    alert(res.data.message);
-
     setForm({
       clientName: "",
       email: "",
@@ -54,6 +51,10 @@ const handleSubmit = async (e) => {
       time: "",
       note: "",
     });
+    
+    alert(res.data.message);
+
+    
 
   } catch (error) {
     console.error(error);

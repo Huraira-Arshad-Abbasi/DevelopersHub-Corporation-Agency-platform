@@ -1,36 +1,30 @@
-import Image from 'next/image'
+"use client";
+
+import { useEffect, useState } from "react";
+import { getPortfolios } from "@/lib/api";
 
 export default function Portfolio() {
-  const projects = [
-    {
-      title: "E-Commerce Website",
-      description: "A full-stack e-commerce platform with payment integration.",
-      imageUrl: "/image/teamwork.jpeg",
-      technologies: ["React", "Node.js", "MongoDB"],
-      liveUrl: "#",
-    },
-    {
-      title: "Portfolio Website",
-      description: "Modern personal portfolio with animations.",
-      imageUrl: "/image/teamwork.jpeg",
-      technologies: ["Next.js", "Tailwind"],
-      liveUrl: "#",
-    },
-    {
-      title: "Booking System",
-      description: "Online booking system for sports facilities.",
-      imageUrl: "/image/teamwork.jpeg",
-      technologies: ["MERN", "JWT"],
-      liveUrl: "#",
-    },
-    {
-      title: "Admin Dashboard",
-      description: "Analytics dashboard with charts and reports.",
-      imageUrl: "/image/teamwork.jpeg",
-      technologies: ["React", "Chart.js"],
-      liveUrl: "#",
-    },
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      try {
+        const res = await getPortfolios();
+        setProjects(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      } 
+    };
+
+    fetchPortfolio();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center py-20">Loading portfolio...</p>;
+  }
 
   return (
     <div className="py-16">
@@ -51,11 +45,11 @@ export default function Portfolio() {
 
               {/* Image */}
 
-              <img
+              {/* <img
                 src={project.imageUrl}
                 alt={project.title}
                 className="w-full h-52 object-cover"
-              />
+              /> */}
 
               {/* Content */}
               <div className="p-6">

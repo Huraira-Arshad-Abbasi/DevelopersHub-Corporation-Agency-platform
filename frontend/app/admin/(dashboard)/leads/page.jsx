@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getLeads, updateLeadStatus, deleteLead } from "@/lib/api";
+import { Trash2} from "lucide-react";
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState([]);
@@ -113,9 +114,9 @@ export default function LeadsPage() {
                 <td className="p-3">
                   <button
                     onClick={() => handleDelete(lead._id)}
-                    className="text-red-600 text-sm"
+                    className="text-red-600 text-sm cursor-pointer hover:underline"
                   >
-                    Delete
+                    <Trash2 size={20} />
                   </button>
                 </td>
 

@@ -128,7 +128,7 @@ export default function BlogForm({ mode , initialData, onSubmit }) {
       {/* Submit */}
       <button
         type="submit"
-        className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-md"
+        className="bg-blue-600 cursor-pointer hover:underline text-white px-4 py-2 rounded-md"
       >
         {mode === "edit" ? "Update Blog" : "Create Blog"}
       </button>

@@ -6,6 +6,7 @@ import {
   updateBookingStatus,
   deleteBooking,
 } from "@/lib/api";
+import { Trash2 } from "lucide-react";
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -131,9 +132,10 @@ export default function BookingsPage() {
                   <td className="p-3">
                     <button
                       onClick={() => handleDelete(booking._id)}
-                      className="text-red-600 text-sm"
+                      className="text-red-600 text-sm cursor-pointer hover:underline"
                     >
-                      Delete
+                      <Trash2 size={20} />
+                      {/* Delete */}
                     </button>
                   </td>
 
