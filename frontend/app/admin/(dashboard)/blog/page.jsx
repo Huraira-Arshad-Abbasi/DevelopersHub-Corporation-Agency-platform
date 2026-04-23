@@ -51,7 +51,7 @@ export default function BlogPage() {
           <thead className="bg-gray-100 text-left">
             <tr>
               <th className="p-3">Title</th>
-              <th className="p-3">Slug</th>
+              <th className="p-3">Tags</th>
               <th className="p-3">Status</th>
               <th className="p-3">Actions</th>
             </tr>
@@ -61,7 +61,7 @@ export default function BlogPage() {
             {blogs.map((blog) => (
               <tr key={blog._id} className="border-t">
                 <td className="p-3">{blog.title}</td>
-                <td className="p-3 text-gray-500">{blog.slug}</td>
+                <td className="p-3 text-gray-500">{blog.tags}</td>
 
                 <td className="p-3">
                   <span

@@ -13,13 +13,16 @@ export default function PortfolioForm({ mode, onSubmit, initialData }) {
     technologies: "",
     liveUrl: "",
   });
+  const [file, setFile] = useState(null) // 🔥 NEW
 
   useEffect(() => {
     const fetchInitialData = async () => {
       if (mode === "edit" && initialData) {
         setForm({
-          ...initialData,
-          technologies: initialData.technologies.join(", "),
+          title: initialData.title || "",
+          description: initialData.description || "",
+          technologies: initialData.technologies?.join(", ") || "",
+          liveUrl: initialData.liveUrl || "",
         });
       }
     };
@@ -33,9 +36,21 @@ export default function PortfolioForm({ mode, onSubmit, initialData }) {
     });
   };
 
+  const handleFileChange = e => {
+    setFile(e.target.files[0])
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    const formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('technologies', form.technologies);
+    formData.append('liveUrl', form.liveUrl);
+    if (file) {
+      formData.append('image', file);
+    }
+    onSubmit(formData);
 
     router.push("/admin/portfolio");
   };
@@ -70,15 +85,36 @@ export default function PortfolioForm({ mode, onSubmit, initialData }) {
         className="w-full border px-4 py-2 rounded-md"
       ></textarea>
 
-      {/* Image URL */}
-      <input
-        type="text"
-        name="imageUrl"
-        placeholder="Image URL"
-        value={form.imageUrl}
-        onChange={handleChange}
-        className="w-full border px-4 py-2 rounded-md"
-      />
+      {/* 🔥 Image Upload */}
+      <div>
+        <label className='block mb-2 font-medium'>Upload Image</label>
+
+        <div className='flex items-center gap-3'>
+          {/* Hidden Input */}
+          <input
+            type='file'
+            accept='image/*'
+            onChange={handleFileChange}
+            id='fileUpload'
+            className='hidden'
+          />
+
+          {/* Custom Button */}
+          <label
+            htmlFor='fileUpload'
+            className='cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition'
+          >
+            Choose Image
+          </label>
+
+          {/* File Name */}
+          {file && (
+            <span className='text-sm text-gray-600 truncate max-w-xs'>
+              {file.name}
+            </span>
+          )}
+        </div>
+      </div>
 
       {/* Technologies */}
       <input

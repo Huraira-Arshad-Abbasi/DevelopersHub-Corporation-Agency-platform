@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getBlogs } from "@/lib/api";
+import Image from "next/image";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -23,6 +24,7 @@ export default function Blog() {
     };
 
     fetchBlogs();
+    
   }, []);
 
   if (loading) {
@@ -46,11 +48,13 @@ export default function Blog() {
           >
 
             {/* Image */}
-            {/* <img
-              src="/image/teamwork.jpeg"
+           {blog.imageUrl && <Image
+              src={blog.imageUrl}
               alt="picture"
+              width={400}
+              height={300}
               className="w-full h-48 object-cover"
-            /> */}
+            />}
 
             {/* Content */}
             <div className="p-5">

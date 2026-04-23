@@ -21,7 +21,9 @@ const getPortfolioById = async (req, res) => {
 
 const createPortfolio = async (req, res) => {
   try {
-    const { title, description, imageUrl, technologies, liveUrl } = req.body;
+    const { title, description, technologies, liveUrl } = req.body;
+    const imageUrl = req.file ? req.file.path : null;
+
     if (!title) return res.status(400).json({ message: 'Title required' });
 
     const item = await Portfolio.create({ title, description, imageUrl, technologies, liveUrl });
@@ -33,8 +35,15 @@ const createPortfolio = async (req, res) => {
 
 const updatePortfolio = async (req, res) => {
   try {
+    // If a new image is uploaded, its URL will be in req.file.path. Otherwise, keep existing image.
+    if (req.file) {
+      item.imageUrl = req.file.path;
+      
+    }
     const item = await Portfolio.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!item) return res.status(404).json({ message: 'Portfolio item not found' });
+    
+    
     res.json(item);
   } catch (err) {
     res.status(500).json({ message: err.message });

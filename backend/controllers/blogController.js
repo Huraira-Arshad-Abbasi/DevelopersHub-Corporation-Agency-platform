@@ -25,29 +25,42 @@ const getAllBlogs = async (req, res) => {
   }
 };
 
-// GET /api/blog/:slug  (public — single post by slug)
-const getBlogBySlug = async (req, res) => {
+// GET /api/Blog/:id (admin — single post by ID)
+const getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findOne({ slug: req.params.slug, status: 'published' });
-    if (!blog) return res.status(404).json({ message: 'Post not found' });
+
+    const blog = await Blog.findById(req.params.id);
+    
+    if (!blog) return res.status(404).json({ message: 'blog not found' });
     res.json(blog);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+
 // POST /api/blog  (admin)
 const createBlog = async (req, res) => {
   try {
-    const { title, content, author, tags, imageUrl, status } = req.body;
+    const { title, content, slug, author, tags, status } = req.body;
+    const imageUrl = req.file ? req.file.path : null;
+
     if (!title || !content)
       return res.status(400).json({ message: 'Title and content required' });
 
-    const slug = slugify(title);
-    const exists = await Blog.findOne({ slug });
-    if (exists) return res.status(400).json({ message: 'A post with this title already exists' });
+    const newslug =  slug || slugify(title);
+    const exists = await Blog.findOne({ slug: newslug });
+    if (exists) return res.status(400).json({ message: 'A post with this slug already exists' });
 
-    const blog = await Blog.create({ title, content, slug, author, tags, imageUrl, status });
+    const blog = await Blog.create({
+      title,
+      content,
+      slug: newslug,
+      author,
+      tags,
+      status,
+      imageUrl,
+    });
     res.status(201).json(blog);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -59,9 +72,21 @@ const updateBlog = async (req, res) => {
   try {
     // regenerate slug if title changed
     if (req.body.title) req.body.slug = slugify(req.body.title);
+     const blog = await Blog.findById(req.params.id);
 
-    const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!blog) return res.status(404).json({ message: 'Post not found' });
+     if (!blog) return res.status(404).json({ message: "Blog not found" });
+     // 🔥 Only update image if new file uploaded
+    if (req.file) {
+      blog.imageUrl = req.file.path;
+    }
+
+    blog.title = req.body.title;
+    blog.content = req.body.content;
+    blog.slug = req.body.slug;
+    blog.tags = req.body.tags;
+    blog.status = req.body.status;
+    
+    await blog.save();
     res.json(blog);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -79,4 +104,4 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-export { getBlogs, getAllBlogs, getBlogBySlug, createBlog, updateBlog, deleteBlog };
+export { getBlogs, getAllBlogs, getBlogById , createBlog, updateBlog, deleteBlog };

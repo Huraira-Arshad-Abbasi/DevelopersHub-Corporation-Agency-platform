@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} ${poppins.variable} h-full`}
     >
-      <body >
+      <body suppressHydrationWarning >
           {children}
       </body>
     </html>

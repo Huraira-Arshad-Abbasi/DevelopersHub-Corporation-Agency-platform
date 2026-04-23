@@ -39,7 +39,7 @@ export default function About () {
         {/* Right Image */}
         <div className='flex justify-center'>
           <Image
-            src='/teamwork.jpeg' // put your image in public/images
+            src='/images/teamwork.jpeg' // put your image in public/images
             alt='Team Work'
             width={500}
             height={400}

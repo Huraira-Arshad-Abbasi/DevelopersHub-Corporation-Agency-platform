@@ -43,8 +43,8 @@ export const deletePortfolio = (id) =>
 export const getBlogs = () => api.get("/blog/all");
 // Get published blogs
 export const getPublishedBlogs = () => api.get("/blog");
-// Get blog by slug
-export const getBlogBySlug = (slug) => api.get(`/blog/${slug}`);
+// Get blog by ID
+export const getBlogById = (id) => api.get(`/blog/${id}`);
 // Create new blog
 export const createBlog = (data) =>
   api.post("/blog", data);

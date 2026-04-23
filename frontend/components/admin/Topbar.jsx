@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { Menu } from "lucide-react";
 
 export default function Topbar () {
   const [admin, setAdmin] = useState(null)
@@ -48,6 +49,16 @@ export default function Topbar () {
 
   return (
     <div className='flex items-center justify-between bg-white px-6 py-4 shadow-sm border-b'>
+      {/* <div className="bg-white px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden p-2 rounded-md hover:bg-gray-100"
+        >
+          <Menu />
+        </button>
+      </div>  
+    </div> */}
       {/* Left Side */}
       <div className='flex items-center gap-4'>
         {/* Back Button */}
@@ -55,7 +66,7 @@ export default function Topbar () {
           onClick={() => router.back()}
           className='text-sm bg-gray-200 px-3 py-1 rounded-md hover:bg-gray-300'
         >
-          ← go back
+          ← back
         </button>
       </div>
       {/* Title */}

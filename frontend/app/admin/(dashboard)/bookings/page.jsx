@@ -12,7 +12,6 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 Fetch bookings
   const fetchBookings = async () => {
     try {
       const res = await getBookings();
@@ -29,12 +28,10 @@ export default function BookingsPage() {
     fetchBookings();
   }, []);
 
-  // 🔥 Update status (REAL API)
   const handleStatusChange = async (id, newStatus) => {
     try {
       await updateBookingStatus(id, newStatus);
-      console.log("this line executed");
-      
+
       setBookings((prev) =>
         prev.map((b) =>
           b._id === id ? { ...b, status: newStatus } : b
@@ -46,7 +43,6 @@ export default function BookingsPage() {
     }
   };
 
-  // 🔥 Delete booking
   const handleDelete = async (id) => {
     if (!confirm("Delete this booking?")) return;
 
@@ -62,19 +58,20 @@ export default function BookingsPage() {
   if (loading) return <p>Loading bookings...</p>;
 
   return (
-    <div className="max-w-full">
+    <div>
       <h1 className="text-2xl font-bold mb-6">Bookings</h1>
 
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
-        <table className="max-w-full table-fixed">
+      {/* 🔥 DESKTOP TABLE */}
+      <div className="hidden md:block bg-white rounded-xl shadow-md overflow-hidden">
+        <table className="w-full table-fixed">
           <thead className="bg-gray-100 text-left">
             <tr>
-              <th className="p-3 w-[25%]">Client</th>
-              <th className="p-3 w-[20%]">Service</th>
-              <th className="p-3 w-[20%]">Schedule</th>
-              <th className="p-3 w-[20%]">Note</th>
-              <th className="p-3 w-[10%]">Status</th>
-              <th className="p-3 w-[5%]">Action</th>
+              <th className="p-3">Client</th>
+              <th className="p-3">Service</th>
+              <th className="p-3">Schedule</th>
+              <th className="p-3">Note</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Action</th>
             </tr>
           </thead>
 
@@ -85,20 +82,15 @@ export default function BookingsPage() {
               return (
                 <tr key={booking._id} className="border-t align-top">
                   
-                  {/* Client */}
                   <td className="p-3">
                     <p className="font-medium">{booking.clientName}</p>
-                    <p className="text-sm text-gray-500 wrap-break-words">
+                    <p className="text-sm text-gray-500">
                       {booking.email}
                     </p>
                   </td>
 
-                  {/* Service */}
-                  <td className="p-3  wrap-break-words">
-                    {booking.service || "-"}
-                  </td>
+                  <td className="p-3">{booking.service || "-"}</td>
 
-                  {/* Date + Time (Improved UI) */}
                   <td className="p-3">
                     <p className="text-sm font-medium">
                       {dateObj.toLocaleDateString()}
@@ -108,12 +100,10 @@ export default function BookingsPage() {
                     </p>
                   </td>
 
-                  {/* Note (clean + small) */}
-                  <td className="p-3 text-xs text-gray-600 wrap-break-words leading-tight">
+                  <td className="p-3 text-xs text-gray-600">
                     {booking.note || "-"}
                   </td>
 
-                  {/* Status */}
                   <td className="p-3">
                     <select
                       value={booking.status}
@@ -128,14 +118,12 @@ export default function BookingsPage() {
                     </select>
                   </td>
 
-                  {/* Delete */}
                   <td className="p-3">
                     <button
                       onClick={() => handleDelete(booking._id)}
-                      className="text-red-600 text-sm cursor-pointer hover:underline"
+                      className="text-red-600 cursor-pointer"
                     >
-                      <Trash2 size={20} />
-                      {/* Delete */}
+                      <Trash2 size={18} className="cursor-pointer" />
                     </button>
                   </td>
 
@@ -144,6 +132,69 @@ export default function BookingsPage() {
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* 🔥 MOBILE CARDS */}
+      <div className="md:hidden space-y-4">
+        {bookings.map((booking) => {
+          const dateObj = new Date(booking.dateTime);
+
+          return (
+            <div
+              key={booking._id}
+              className="bg-white p-4 rounded-xl shadow-md space-y-3"
+            >
+              {/* Client */}
+              <div>
+                <p className="font-semibold">{booking.clientName}</p>
+                <p className="text-sm text-gray-500">{booking.email}</p>
+              </div>
+
+              {/* Service */}
+              <p className="text-sm">
+                <span className="font-medium">Service:</span>{" "}
+                {booking.service || "-"}
+              </p>
+
+              {/* Date + Time */}
+              <p className="text-sm">
+                <span className="font-medium">Date:</span>{" "}
+                {dateObj.toLocaleDateString()}
+                <br />
+                <span className="text-xs text-gray-500">
+                  {dateObj.toLocaleTimeString()}
+                </span>
+              </p>
+
+              {/* Note */}
+              <p className="text-xs text-gray-600 line-clamp-3">
+                {booking.note || "-"}
+              </p>
+
+              {/* Actions */}
+              <div className="flex justify-between items-center pt-2">
+                <select
+                  value={booking.status}
+                  onChange={(e) =>
+                    handleStatusChange(booking._id, e.target.value)
+                  }
+                  className="border px-2 py-1 rounded-md text-sm"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+
+                <button
+                  onClick={() => handleDelete(booking._id)}
+                  className="text-red-600 cursor-pointer"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

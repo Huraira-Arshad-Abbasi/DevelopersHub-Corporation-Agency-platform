@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getPortfolios } from "@/lib/api";
+import Image from "next/image";
 
 export default function Portfolio() {
   const [projects, setProjects] = useState([]);
@@ -44,12 +45,13 @@ export default function Portfolio() {
             >
 
               {/* Image */}
-
-              {/* <img
+              {project.imageUrl && <Image
                 src={project.imageUrl}
-                alt={project.title}
-                className="w-full h-52 object-cover"
-              /> */}
+                alt="picture" 
+                width={400}
+                height={300}
+                className="w-full h-48 object-cover"
+              />}
 
               {/* Content */}
               <div className="p-6">
