@@ -10,6 +10,7 @@ export default function CreateServicePage() {
   const handleSubmit = async (data) => {
     try {
       await createService(data);
+      
       router.push("/admin/services");
     } catch (err) {
       console.error(err);

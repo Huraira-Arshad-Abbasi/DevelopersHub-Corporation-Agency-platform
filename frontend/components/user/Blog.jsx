@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getBlogs } from "@/lib/api";
+import { getPublishedBlogs } from "@/lib/api";
 import Image from "next/image";
 
 export default function Blog() {
@@ -11,10 +11,10 @@ export default function Blog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await getBlogs();
-        console.log(res.data);
+        const res = await getPublishedBlogs();
         
         setBlogs(res.data);
+        
 
       } catch (err) {
         console.error(err);
@@ -50,6 +50,7 @@ export default function Blog() {
             {/* Image */}
            {blog.imageUrl && <Image
               src={blog.imageUrl}
+              loading="eager"
               alt="picture"
               width={400}
               height={300}

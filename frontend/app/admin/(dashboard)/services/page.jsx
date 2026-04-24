@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getServices, deleteService } from "@/lib/api";
+import { getAllServices, deleteService } from "@/lib/api";
 import Link from "next/link";
 import { Trash2, SquarePen, CirclePlusIcon } from "lucide-react";
 
@@ -11,7 +11,7 @@ export default function ServicesPage() {
 
   const fetchServices = async () => {
     try {
-      const res = await getServices();
+      const res = await getAllServices();
       setServices(res.data);
     } catch (err) {
       console.error(err);

@@ -9,13 +9,15 @@ export const getAdminProfile = () => api.get("/auth/me");
 
 
 // <-- Services API --->
-// Get all services
+// Get active services
 export const getServices = () => api.get("/services");
 // Get service by ID
 export const getServiceById = (id) => api.get(`/services/${id}`);
 // Create new service
 export const createService = (data) =>
   api.post("/services", data);
+// Get all services (admin)
+export const getAllServices = () => api.get("/services/all");
 // Update service by ID
 export const updateService = (id, data) =>
   api.put(`/services/${id}`, data);

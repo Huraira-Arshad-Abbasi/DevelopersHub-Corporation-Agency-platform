@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { getServices, updateService } from "@/lib/api";
+import { getAllServices, updateService } from "@/lib/api";
 import ServiceForm from "@/components/admin/forms/ServiceForm";
 
 export default function EditServicePage() {
@@ -13,7 +13,7 @@ export default function EditServicePage() {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await getServices();
+      const res = await getAllServices();
       const service = res.data.find((s) => s._id === id);
       setInitialData(service);
     };
@@ -23,6 +23,8 @@ export default function EditServicePage() {
   const handleSubmit = async (data) => {
     try {
       await updateService(id, data);
+      console.log(data);
+      
       alert("Service updated!");
       router.push("/admin/services");
     } catch (err) {

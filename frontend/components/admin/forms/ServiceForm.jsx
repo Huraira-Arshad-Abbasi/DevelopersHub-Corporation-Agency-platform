@@ -25,7 +25,7 @@ export default function ServiceForm ({ onSubmit, mode, initialData }) {
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target
-
+    
     setForm({
       ...form,
       [name]: type === 'checkbox' ? checked : value
@@ -36,6 +36,7 @@ export default function ServiceForm ({ onSubmit, mode, initialData }) {
     e.preventDefault()
     // submit data
     onSubmit(form)
+    
 
     router.push('/admin/services')
   }

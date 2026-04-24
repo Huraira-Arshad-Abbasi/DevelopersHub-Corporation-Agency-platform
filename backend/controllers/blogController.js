@@ -10,6 +10,7 @@ const getBlogs = async (req, res) => {
       .select('-content')   // exclude heavy content from listing
       .sort({ createdAt: -1 });
     res.json(blogs);
+    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -20,6 +21,7 @@ const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().select('-content').sort({ createdAt: -1 });
     res.json(blogs);
+    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
