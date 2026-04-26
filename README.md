@@ -183,11 +183,9 @@ The frontend will run on `http://localhost:3000` by default.
 
 ## 🔐 Authentication
 
-Authentication is handled via **JWT (JSON Web Tokens)**. Tokens are stored in HTTP-only cookies for security. The admin dashboard is protected and only accessible to authenticated users.
+Authentication is handled using **JWT (JSON Web Tokens)**. The token is stored in the browser's **localStorage** and sent with API requests for protected routes. The admin dashboard is secured and only accessible to authenticated users.
 
 ---
-
-## 📡 API Overview
 
 ## 📡 API Overview
 
